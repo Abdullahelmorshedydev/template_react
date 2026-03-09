@@ -1,49 +1,31 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Page404 from "./pages/Page404";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import { AppProviders } from './app/providers';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import './index.scss';
 
+const HomePage = lazy(() => import('./features/home/HomePage.jsx'));
+const LoginPage = lazy(() => import('./features/auth/LoginPage.jsx'));
+const Page404 = lazy(() => import('./features/misc/Page404.jsx'));
+
 export default function App() {
   return (
     <div className="col-12 App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" >
-            <Route index element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-          </Route>
-          <Route path="*" element={<Page404 />} />
-        </Routes>
-      </BrowserRouter>
+      <AppProviders>
+        <BrowserRouter>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/">
+                <Route index element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+              </Route>
+              <Route path="*" element={<Page404 />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </AppProviders>
     </div>
   );
 }
 
-// #Essentials
-// npm i -D react-router-dom@latest
-// npm i sass
-// npm i bootstrap@latest
-// npm i axios
-// npm i @tanstack/react-query
-
-// #State Management
-// npm install zustand
-// npm install @reduxjs/toolkit react-redux
-// npm i recoil
-
-// #Fontawesome
-// npm i --save @fortawesome/fontawesome-svg-core
-// npm i --save @fortawesome/free-solid-svg-icons
-// npm i --save @fortawesome/free-regular-svg-icons
-// npm i --save @fortawesome/free-brands-svg-icons
-// npm i --save @fortawesome/react-fontawesome@latest
-
-// #Optional
-// npm install gsap
-// npm i sweetalert2
-// npm i swiper
-// npm i wowjs
-// npm i animate.css --save
