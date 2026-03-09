@@ -27,8 +27,10 @@ export default function App() {
 // npm i sass
 // npm i bootstrap@latest
 // npm i axios
+// npm i @tanstack/react-query
 
 // #State Management
+// npm install zustand
 // npm install @reduxjs/toolkit react-redux
 // npm i recoil
 
@@ -40,6 +42,7 @@ export default function App() {
 // npm i --save @fortawesome/react-fontawesome@latest
 
 // #Optional
+// npm install gsap
 // npm i sweetalert2
 // npm i swiper
 // npm i wowjs
