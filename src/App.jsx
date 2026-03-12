@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { lazy } from "react";
 import { AppProviders } from "./app/providers";
+import { ProtectedRoute } from "./shared/components/ProtectedRoute";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "./index.scss";
@@ -16,7 +17,14 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/">
-              <Route index element={<HomePage />} />
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/login" element={<LoginPage />} />
             </Route>
             <Route path="*" element={<Page404 />} />
