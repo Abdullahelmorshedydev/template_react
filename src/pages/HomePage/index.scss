@@ -1,0 +1,69 @@
+.home-page {
+  min-height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  cursor: none;
+}
+
+.home-hero {
+  position: fixed;
+  inset: 0;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/images/home_background.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.75) 70%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+.hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.6) 0%,
+    transparent 35%,
+    transparent 65%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+/* Fixed opacity above; only a hole in the dark moves with the cursor */
+.cursor-hole {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(
+    circle at calc(var(--mouse-x, 0.5) * 100%) calc(var(--mouse-y, 0.5) * 100%),
+    transparent 0%,
+    transparent 12%,
+    black 20%,
+    black 100%
+  );
+  mask-image: radial-gradient(
+    circle at calc(var(--mouse-x, 0.5) * 100%) calc(var(--mouse-y, 0.5) * 100%),
+    transparent 0%,
+    transparent 12%,
+    black 20%,
+    black 100%
+  );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
