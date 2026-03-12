@@ -132,10 +132,10 @@ export default function LoginPage() {
     setError("");
     setIsLoading(true);
 
-    // Simulate login - replace with actual authentication
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    // Fake auth: correct password is 123456789
+    await new Promise((resolve) => setTimeout(resolve, 800));
 
-    if (password.length >= 4) {
+    if (password === "123456789") {
       // Store token so api.js and protected routes recognize the user
       localStorage.setItem("authToken", "logged-in");
       // Success animation
@@ -153,7 +153,7 @@ export default function LoginPage() {
         },
       });
     } else {
-      setError("Password must be at least 4 characters");
+      setError("Hint: numbers from 1 - 9");
       setIsLoading(false);
       // Error shake animation
       gsap.to(".input-wrapper", {
