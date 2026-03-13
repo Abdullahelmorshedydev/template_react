@@ -375,9 +375,7 @@ export default function HomePage() {
             {!galleryOpen && <div className="cursor-hole" aria-hidden="true" />}
             <div className="home-hints">
               <p className="home-click-hint">Click to open gallery</p>
-              <p className="home-scroll-hint">
-                Swipe left or right to show more
-              </p>
+              <p className="home-scroll-hint">Scroll down to show more</p>
             </div>
           </div>
         </div>
