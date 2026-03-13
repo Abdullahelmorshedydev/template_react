@@ -1,9 +1,16 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import {
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useCallback,
+} from "react";
 import { gsap } from "gsap";
 import "./index.scss";
 import GallerySwiper from "./GallerySwiper";
 import { GALLERY_IMAGES } from "./galleryConfig";
 import { VIDEO_SRC, VIDEO_POSTER } from "./videoConfig";
+import { MESSAGE_TITLE, MESSAGE_TEXT } from "./messageConfig";
 
 export default function HomePage() {
   const pageRef = useRef(null);
@@ -15,8 +22,7 @@ export default function HomePage() {
   const scrollToGalleryCooldownRef = useRef(0);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [openFrom, setOpenFrom] = useState(null);
-  const [showGallerySection, setShowGallerySection] = useState(false);
-  const [showVideoSection, setShowVideoSection] = useState(false);
+  const [section, setSection] = useState("birthday");
   const [videoOpen, setVideoOpen] = useState(false);
   const [openFromVideo, setOpenFromVideo] = useState(null);
   const videoSectionRef = useRef(null);
@@ -27,6 +33,13 @@ export default function HomePage() {
   const videoModalVideoRef = useRef(null);
   const scrollToVideoCooldownRef = useRef(0);
   const videoClosingRef = useRef(false);
+  const messageSectionRef = useRef(null);
+  const messageWrapRef = useRef(null);
+  const scrollToMessageCooldownRef = useRef(0);
+
+  const showGallerySection = section === "gallery";
+  const showVideoSection = section === "video";
+  const showMessageSection = section === "message";
 
   useEffect(() => {
     const el = pageRef.current;
@@ -70,7 +83,7 @@ export default function HomePage() {
       y: -80,
       duration: 0.65,
       ease: "power2.in",
-      onComplete: () => setShowGallerySection(true),
+      onComplete: () => setSection("gallery"),
     });
   }, []);
 
@@ -87,7 +100,7 @@ export default function HomePage() {
         hasScrolledRef.current = false;
         justReturnedToBirthdayRef.current = true;
         scrollToGalleryCooldownRef.current = Date.now() + 1500;
-        setShowGallerySection(false);
+        setSection("birthday");
       },
     });
   }, []);
@@ -103,8 +116,7 @@ export default function HomePage() {
       duration: 0.55,
       ease: "power2.in",
       onComplete: () => {
-        setShowGallerySection(false);
-        setShowVideoSection(true);
+        setSection("video");
       },
     });
   }, []);
@@ -120,8 +132,40 @@ export default function HomePage() {
       ease: "power2.in",
       onComplete: () => {
         scrollToVideoCooldownRef.current = Date.now() + 800;
-        setShowVideoSection(false);
-        setShowGallerySection(true);
+        setSection("gallery");
+      },
+    });
+  }, []);
+
+  const runScrollToMessageSection = useCallback(() => {
+    if (Date.now() < scrollToMessageCooldownRef.current) return;
+    const wrap = videoWrapRef.current;
+    if (!wrap) return;
+
+    scrollToMessageCooldownRef.current = Date.now() + 500;
+    gsap.to(wrap, {
+      opacity: 0,
+      y: -50,
+      duration: 0.5,
+      ease: "power2.in",
+      onComplete: () => {
+        setSection("message");
+      },
+    });
+  }, []);
+
+  const runScrollBackToVideo = useCallback(() => {
+    const wrap = messageWrapRef.current;
+    if (!wrap) return;
+
+    gsap.to(wrap, {
+      opacity: 0,
+      y: 40,
+      duration: 0.5,
+      ease: "power2.in",
+      onComplete: () => {
+        scrollToMessageCooldownRef.current = Date.now() + 600;
+        setSection("video");
       },
     });
   }, []);
@@ -162,8 +206,9 @@ export default function HomePage() {
 
   const touchStartYRef = useRef(null);
 
+  // Only when on birthday section: scroll down → gallery (don’t run on video/message)
   useEffect(() => {
-    if (showGallerySection) return;
+    if (section !== "birthday") return;
     const TH = 35;
     const handleWheel = (e) => {
       if (hasScrolledRef.current) return;
@@ -192,7 +237,7 @@ export default function HomePage() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [showGallerySection, runScrollToGallery]);
+  }, [section, runScrollToGallery]);
 
   const scrollBackCooldownRef = useRef(0);
   useEffect(() => {
@@ -246,13 +291,78 @@ export default function HomePage() {
     justReturnedToBirthdayRef.current = false;
   }, [showGallerySection]);
 
+  const videoTouchStartYRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!showVideoSection || showMessageSection) return;
+    const sectionEl = videoSectionRef.current;
+    const target = sectionEl || document;
+
+    const TH = 25;
+    const handleWheel = (e) => {
+      if (e.deltaY < -TH) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (videoOpen) closeVideoModal();
+        else runScrollBackToGallery();
+      } else if (e.deltaY > TH) {
+        if (Date.now() < scrollToMessageCooldownRef.current) return;
+        e.preventDefault();
+        e.stopPropagation();
+        runScrollToMessageSection();
+      }
+    };
+    const onVideoTouchStart = (e) => {
+      if (e.touches.length) videoTouchStartYRef.current = e.touches[0].clientY;
+    };
+    const onVideoTouchEnd = (e) => {
+      if (Date.now() < scrollToMessageCooldownRef.current) return;
+      if (videoTouchStartYRef.current == null || !e.changedTouches.length)
+        return;
+      const dy = e.changedTouches[0].clientY - videoTouchStartYRef.current;
+      videoTouchStartYRef.current = null;
+      if (dy < 70) return;
+      runScrollToMessageSection();
+    };
+
+    target.addEventListener("wheel", handleWheel, {
+      passive: false,
+      capture: true,
+    });
+    target.addEventListener("touchstart", onVideoTouchStart, { passive: true });
+    target.addEventListener("touchend", onVideoTouchEnd, { passive: true });
+
+    return () => {
+      target.removeEventListener("wheel", handleWheel, { capture: true });
+      target.removeEventListener("touchstart", onVideoTouchStart);
+      target.removeEventListener("touchend", onVideoTouchEnd);
+    };
+  }, [
+    showVideoSection,
+    showMessageSection,
+    videoOpen,
+    runScrollBackToGallery,
+    runScrollToMessageSection,
+    closeVideoModal,
+  ]);
+
   useEffect(() => {
-    if (!showVideoSection) return;
+    if (!showVideoSection || showMessageSection || !videoWrapRef.current)
+      return;
+    const wrap = videoWrapRef.current;
+    gsap.fromTo(
+      wrap,
+      { opacity: 0, y: 70 },
+      { opacity: 1, y: 0, duration: 0.75, ease: "power2.out", delay: 0.1 },
+    );
+  }, [showVideoSection, showMessageSection]);
+
+  useEffect(() => {
+    if (!showMessageSection) return;
     const handleWheelBack = (e) => {
       if (e.deltaY >= -15) return;
       e.preventDefault();
-      if (videoOpen) closeVideoModal();
-      else runScrollBackToGallery();
+      runScrollBackToVideo();
     };
     document.addEventListener("wheel", handleWheelBack, {
       passive: false,
@@ -260,17 +370,17 @@ export default function HomePage() {
     });
     return () =>
       document.removeEventListener("wheel", handleWheelBack, { capture: true });
-  }, [showVideoSection, videoOpen, runScrollBackToGallery, closeVideoModal]);
+  }, [showMessageSection, runScrollBackToVideo]);
 
   useEffect(() => {
-    if (!showVideoSection || !videoWrapRef.current) return;
-    const wrap = videoWrapRef.current;
+    if (!showMessageSection || !messageWrapRef.current) return;
+    const wrap = messageWrapRef.current;
     gsap.fromTo(
       wrap,
-      { opacity: 0, y: 70 },
-      { opacity: 1, y: 0, duration: 0.75, ease: "power2.out", delay: 0.1 },
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.65, ease: "power2.out", delay: 0.08 },
     );
-  }, [showVideoSection]);
+  }, [showMessageSection]);
 
   useEffect(() => {
     const section = videoSectionRef.current;
@@ -359,7 +469,7 @@ export default function HomePage() {
       }
     >
       {/* Section 1: Happy Birthday – scroll to reveal gallery */}
-      {!showGallerySection && !showVideoSection && (
+      {section === "birthday" && (
         <section ref={birthdayRef} className="home-birthday-section">
           <h1 className="home-birthday-text">Morshedy Only One</h1>
           <p className="home-birthday-hint">Scroll to continue</p>
@@ -381,7 +491,7 @@ export default function HomePage() {
         </div>
       )}
       {/* Section 3: Video – poster + play button; click opens video modal */}
-      {showVideoSection && (
+      {section === "video" && (
         <section
           ref={videoSectionRef}
           className={`home-video-section ${videoOpen ? "video-modal-open" : ""}`}
@@ -417,7 +527,36 @@ export default function HomePage() {
               <span className="home-video-play-icon" />
             </div>
           )}
-          <p className="home-video-scroll-hint">Scroll up to go back</p>
+          <p className="home-video-scroll-hint">
+            Scroll down for message · Scroll up to go back
+          </p>
+        </section>
+      )}
+
+      {/* Section 4: Message – quote box with title "Message for you" */}
+      {section === "message" && (
+        <section ref={messageSectionRef} className="home-message-section">
+          <div ref={messageWrapRef} className="home-message-card">
+            <div className="home-message-card__head">
+              <span className="home-message-card__label">{MESSAGE_TITLE}</span>
+            </div>
+            <blockquote className="home-message-card__quote">
+              <span
+                className="home-message-card__quote-mark"
+                aria-hidden="true"
+              >
+                &ldquo;
+              </span>
+              <p className="home-message-card__body">{MESSAGE_TEXT}</p>
+              <span
+                className="home-message-card__quote-mark-end"
+                aria-hidden="true"
+              >
+                &rdquo;
+              </span>
+            </blockquote>
+          </div>
+          <p className="home-message-scroll-hint">Scroll up to go back</p>
         </section>
       )}
 
