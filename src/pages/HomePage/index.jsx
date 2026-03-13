@@ -1,13 +1,17 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import "./index.scss";
+import GallerySwiper from "./GallerySwiper";
+import { GALLERY_IMAGES } from "./galleryConfig";
 
 export default function HomePage() {
   const pageRef = useRef(null);
   const rafRef = useRef(null);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [openFrom, setOpenFrom] = useState(null);
 
   useEffect(() => {
     const el = pageRef.current;
-    if (!el) return;
+    if (!el || galleryOpen) return;
 
     const onMove = (e) => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -27,17 +31,49 @@ export default function HomePage() {
       window.removeEventListener("mousemove", onMove);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
+  }, [galleryOpen]);
+
+  const openGallery = useCallback((e) => {
+    setOpenFrom(e ? { x: e.clientX, y: e.clientY } : null);
+    setGalleryOpen(true);
   }, []);
+  const closeGallery = useCallback(() => setGalleryOpen(false), []);
 
   return (
-    <div ref={pageRef} className="home-page">
+    <div
+      ref={pageRef}
+      className={`home-page ${galleryOpen ? "gallery-open" : ""}`}
+      onClick={galleryOpen ? undefined : openGallery}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (!galleryOpen && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          openGallery(e);
+        }
+      }}
+      aria-label="Click to open gallery"
+    >
       <div className="home-hero">
         <div className="hero-media">
           <div className="hero-overlay" />
           <div className="hero-gradient" />
-          <div className="cursor-hole" aria-hidden="true" />
+          {!galleryOpen && <div className="cursor-hole" aria-hidden="true" />}
+          {!galleryOpen && (
+            <div className="home-hints">
+              <p className="home-click-hint">Click to open gallery</p>
+              <p className="home-scroll-hint">Scroll down to show more</p>
+            </div>
+          )}
         </div>
       </div>
+      {galleryOpen && (
+        <GallerySwiper
+          images={GALLERY_IMAGES}
+          onClose={closeGallery}
+          openFrom={openFrom}
+        />
+      )}
     </div>
   );
 }

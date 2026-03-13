@@ -3,6 +3,10 @@
   width: 100vw;
   overflow: hidden;
   cursor: none;
+
+  &.gallery-open {
+    cursor: default;
+  }
 }
 
 .home-hero {
@@ -13,9 +17,37 @@
 .hero-media {
   position: absolute;
   inset: 0;
+  background-color: #0d0d0d;
   background-image: url("/assets/images/home_background.png");
   background-size: cover;
   background-position: center;
+}
+
+.home-hints {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.home-click-hint,
+.home-scroll-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.home-scroll-hint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .hero-overlay {
@@ -66,4 +98,3 @@
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
-
