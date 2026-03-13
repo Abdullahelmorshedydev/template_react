@@ -47,6 +47,8 @@ $gray: rgba(255, 255, 255, 0.6);
 }
 
 .login-content {
+  position: relative;
+  min-height: 50vh;
   text-align: center;
 }
 

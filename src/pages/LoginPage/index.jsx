@@ -14,12 +14,9 @@ export default function LoginPage() {
       navigate("/", { replace: true });
       return;
     }
-    // Start with intro visible; form and welcome text hidden
     gsap.set(".login-form", { opacity: 0, y: 24, visibility: "hidden" });
     gsap.set(".login-text-phase", { opacity: 0, visibility: "hidden" });
-    gsap.set(".login-brand-fill", {
-      clipPath: "inset(0 100% 0 0)",
-    });
+    gsap.set(".login-brand-fill", { clipPath: "inset(0 100% 0 0)" });
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -27,33 +24,17 @@ export default function LoginPage() {
       },
     });
 
-    // Container in
     tl.fromTo(
       ".login-container",
       { opacity: 0, y: 30 },
       { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
     )
-      // Phase 1: "Secret Gallery" (loader is on the text via CSS)
       .fromTo(
         ".login-brand",
         { opacity: 0, y: 12 },
         { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
         "-=0.4",
       )
-      // Orange fill animation on text before opening form
-      // 1) Sweep from first to last letter and back (1st cycle)
-      .fromTo(
-        ".login-brand-fill",
-        { clipPath: "inset(0% 90% 0% 0%)" }, // thin band starting at the left
-        {
-          clipPath: "inset(0% 0% 0% 90%)", // same band at the right
-          duration: 1.1,
-          ease: "none",
-          yoyo: true,
-          repeat: 1, // go then return = 1 full cycle
-        },
-      )
-      // 2) Sweep again (2nd cycle)
       .fromTo(
         ".login-brand-fill",
         { clipPath: "inset(0% 90% 0% 0%)" },
@@ -65,14 +46,22 @@ export default function LoginPage() {
           repeat: 1,
         },
       )
-      // 3) When it has just returned to the first letters on the second cycle,
-      // expand to cover the whole word
+      .fromTo(
+        ".login-brand-fill",
+        { clipPath: "inset(0% 90% 0% 0%)" },
+        {
+          clipPath: "inset(0% 0% 0% 90%)",
+          duration: 1.1,
+          ease: "none",
+          yoyo: true,
+          repeat: 1,
+        },
+      )
       .to(".login-brand-fill", {
         clipPath: "inset(0 0% 0 0)",
         duration: 0.8,
         ease: "power2.out",
       })
-      // Then transition to the form
       .to(".login-intro-phase", {
         opacity: 0,
         y: -16,
@@ -81,7 +70,6 @@ export default function LoginPage() {
       })
       .set(".login-intro-phase", { visibility: "hidden" })
       .set(".login-text-phase", { visibility: "visible" })
-      // Phase 2: Welcome Back + subtitle
       .fromTo(
         ".login-title",
         { opacity: 0, x: -20 },
@@ -114,7 +102,6 @@ export default function LoginPage() {
         "-=0.2",
       );
 
-    // Floating particles
     gsap.to(".particle", {
       y: "random(-20, 20)",
       x: "random(-20, 20)",
@@ -131,14 +118,10 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-
-    // Fake auth: correct password is 123456789
     await new Promise((resolve) => setTimeout(resolve, 800));
 
     if (password === "123456789") {
-      // Store token so api.js and protected routes recognize the user
       localStorage.setItem("authToken", "logged-in");
-      // Success animation
       gsap.to(".login-form", {
         opacity: 0,
         y: -20,
@@ -148,14 +131,11 @@ export default function LoginPage() {
       gsap.to(".login-button", {
         scale: 1.2,
         duration: 0.2,
-        onComplete: () => {
-          navigate("/");
-        },
+        onComplete: () => navigate("/"),
       });
     } else {
       setError("Hint: numbers from 1 - 9");
       setIsLoading(false);
-      // Error shake animation
       gsap.to(".input-wrapper", {
         x: 10,
         duration: 0.1,
@@ -168,7 +148,6 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      {/* Background Particles */}
       <div className="particles">
         {[...Array(20)].map((_, i) => (
           <div
@@ -188,7 +167,6 @@ export default function LoginPage() {
 
       <div className="login-container">
         <div className="login-content">
-          {/* Phase 1: Loader – large word only, no button */}
           <div className="login-intro-phase">
             <h1 className="login-brand">
               <span className="login-brand-text">Secret Gallery</span>
@@ -210,9 +188,7 @@ export default function LoginPage() {
               />
               <div className="input-line"></div>
             </div>
-
             {error && <p className="error-message">{error}</p>}
-
             <button
               type="submit"
               className={`login-button ${isLoading ? "loading" : ""}`}
