@@ -274,7 +274,7 @@
 }
 
 .home-message-card {
-  width: min(92vw, 560px);
+  width: min(96vw, 1100px);
   overflow: hidden;
   border-radius: 12px;
   box-shadow:
@@ -325,8 +325,8 @@
 .home-message-card__body {
   margin: 0;
   padding-left: 0.5rem;
-  font-size: 1.08rem;
-  line-height: 1.75;
+  font-size: 1.15rem;
+  line-height: 1.8;
   font-style: italic;
   color: rgba(245, 245, 245, 0.9);
   white-space: pre-line;
