@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // ─── Tabloh (framed artwork on wall) ─────────────────────────────────────────
 $tabloh-frame-width: 8px;
 $tabloh-mat-width: 4px;
@@ -60,7 +62,7 @@ $tabloh-tilt-y: -3deg;
     145deg,
     $tabloh-frame-color-light 0%,
     $tabloh-frame-color 35%,
-    darken($tabloh-frame-color, 4%) 100%
+    color.adjust($tabloh-frame-color, $lightness: -4%) 100%
   );
   border-radius: $tabloh-radius + 2;
   box-shadow: $tabloh-shadow-inner, $tabloh-shadow-frame, $tabloh-shadow-drop;
