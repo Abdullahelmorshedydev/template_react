@@ -1,9 +1,9 @@
 const BASE = "/assets/images/gellery";
 
 export const GALLERY_IMAGES = [
-  `${BASE}/1.JPG`,
+  // `${BASE}/1.JPG`,
   `${BASE}/2.JPG`,
-  `${BASE}/3.JPG`,
+  // `${BASE}/3.JPG`,
   `${BASE}/4.JPG`,
   `${BASE}/5.JPG`,
   `${BASE}/6.JPG`,
