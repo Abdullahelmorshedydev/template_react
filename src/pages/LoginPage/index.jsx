@@ -120,7 +120,7 @@ export default function LoginPage() {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    if (password === "123456789") {
+    if (password === "16032002") {
       localStorage.setItem("authToken", "logged-in");
       gsap.to(".login-form", {
         opacity: 0,
@@ -134,7 +134,7 @@ export default function LoginPage() {
         onComplete: () => navigate("/"),
       });
     } else {
-      setError("Hint: numbers from 1 - 9");
+      setError("Hint: Taree5 Miladk ya 8bya");
       setIsLoading(false);
       gsap.to(".input-wrapper", {
         x: 10,
