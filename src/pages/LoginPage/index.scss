@@ -1,14 +1,18 @@
-// Color Variables – reference: Aeonik-style loader image
-$primary: #f57f00;
-$dark: #0a0a0a;
-$dark-bg: #0d0d0d;
-$light: #ffffff;
-$gray: rgba(255, 255, 255, 0.6);
+// Match project style: soft pink background, heart pattern, #fd4950 primary
+$heart-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath fill='%23fd4950' fill-opacity='0.45' d='M40 54C30 46 22 36 22 26a10 10 0 0 1 20 0c0 10-8 20-18 28z'/%3E%3Cpath fill='%23fd4950' fill-opacity='0.28' d='M8 18C4 14 0 10 0 5a5 5 0 0 1 10 0c0 5-4 9-8 13z' transform='translate(52,8)'/%3E%3Cpath fill='%23fd4950' fill-opacity='0.22' d='M6 14C3 11 0 8 0 4a4 4 0 0 1 8 0c0 4-3 7-6 10z' transform='translate(12,42)'/%3E%3C/svg%3E");
+
+$primary: #fd4950;
+$bg: #ffe6e7;
+$text: #4a3a3b;
+$text-muted: rgba(184, 74, 78, 0.85);
+$white: #ffffff;
 
 .login-page {
   min-height: 100vh;
   width: 100%;
-  background-color: $dark-bg;
+  background-color: $bg;
+  background-image: $heart-pattern;
+  background-repeat: repeat;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,7 +20,7 @@ $gray: rgba(255, 255, 255, 0.6);
   overflow: hidden;
 }
 
-// Particles Background
+// Particles Background – match project primary
 .particles {
   position: absolute;
   top: 0;
@@ -41,7 +45,6 @@ $gray: rgba(255, 255, 255, 0.6);
   padding: 2rem;
 }
 
-// Wider when showing intro so big one-line text fits
 .login-container:has(.login-intro-phase) {
   max-width: min(95vw, 900px);
 }
@@ -52,7 +55,7 @@ $gray: rgba(255, 255, 255, 0.6);
   text-align: center;
 }
 
-// Phase 1: Loader – large centered word only
+// Phase 1: Intro – large centered brand
 .login-intro-phase {
   position: relative;
   width: 100%;
@@ -72,7 +75,7 @@ $gray: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
   line-height: 1.1;
   white-space: nowrap;
-  color: #1a1a1a;
+  color: $text;
   font-family:
     system-ui,
     -apple-system,
@@ -80,34 +83,17 @@ $gray: rgba(255, 255, 255, 0.6);
     Roboto,
     sans-serif;
   text-shadow:
-    0 0 40px rgba(255, 255, 255, 0.05),
-    0 0 80px rgba(255, 255, 255, 0.03);
-  opacity: 0.6;
+    0 0 40px rgba(253, 73, 80, 0.08),
+    0 0 80px rgba(253, 73, 80, 0.04);
+  opacity: 0.9;
   text-align: center;
-}
-
-// Outline only (transparent fill) – base text, like “Ae” unfilled part
-.login-intro-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: $light;
-  background-color: #9a4a0f;
-  border: none;
-  border-radius: 9999px;
-  text-shadow: none;
-  box-shadow: none;
-  font-family: inherit;
 }
 
 .login-brand-text {
   position: relative;
   display: inline-block;
-  -webkit-text-fill-color: $dark;
-  color: $dark;
+  -webkit-text-fill-color: $text;
+  color: $text;
   text-shadow: none;
   overflow: visible;
 }
@@ -119,14 +105,14 @@ $gray: rgba(255, 255, 255, 0.6);
   color: transparent;
   background: linear-gradient(
     90deg,
-    #f5a623 0%,
-    #f57f00 30%,
-    #e06d0a 60%,
-    #b56f28 100%
+    #e85a5f 0%,
+    $primary 30%,
+    #c94a4e 60%,
+    #b84a4e 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
-  clip-path: inset(0 100% 0 0); // hidden by default
+  clip-path: inset(0 100% 0 0);
   pointer-events: none;
 }
 
@@ -135,19 +121,17 @@ $gray: rgba(255, 255, 255, 0.6);
   margin-bottom: 0;
 }
 
-// Login Title (Welcome Back)
 .login-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: $light;
+  color: $primary;
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
 }
 
-// Login Subtitle
 .login-subtitle {
   font-size: 1rem;
-  color: $gray;
+  color: $text-muted;
   margin-bottom: 1.25rem;
 }
 
@@ -159,42 +143,39 @@ $gray: rgba(255, 255, 255, 0.6);
   margin-top: 2rem;
 }
 
-// Input Wrapper
 .input-wrapper {
   position: relative;
   width: 100%;
 }
 
-// Login Input
 .login-input {
   width: 100%;
   padding: 1rem 0;
   font-size: 1.1rem;
-  color: $light;
+  color: $text;
   background: transparent;
   border: none;
   outline: none;
   transition: all 0.3s ease;
 
   &::placeholder {
-    color: $gray;
+    color: $text-muted;
     transition: all 0.3s ease;
   }
 
   &:focus::placeholder {
-    opacity: 0.5;
+    opacity: 0.6;
     transform: translateX(10px);
   }
 }
 
-// Input Line (animated underline)
 .input-line {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(253, 73, 80, 0.25);
   transition: all 0.3s ease;
 
   &::before {
@@ -213,33 +194,34 @@ $gray: rgba(255, 255, 255, 0.6);
   width: 100%;
 }
 
-// Error Message
 .error-message {
-  color: #ff4444;
+  color: black;
   font-size: 0.85rem;
   text-align: left;
   margin-top: -0.5rem;
 }
 
-// Login Button
+// Login Button – project primary
 .login-button {
   position: relative;
   width: 100%;
   padding: 1rem 2rem;
   font-size: 1rem;
   font-weight: 600;
-  color: $light;
-  background-color: #a05a1f;
+  color: $white;
+  background-color: $primary;
   border: none;
   border-radius: 9999px;
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s ease;
   margin-top: 1rem;
+  box-shadow: 0 8px 24px rgba(253, 73, 80, 0.35);
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    background-color: #b56f28;
+    background-color: #e85a5f;
+    box-shadow: 0 12px 28px rgba(253, 73, 80, 0.4);
   }
 
   &:active:not(:disabled) {
@@ -250,61 +232,59 @@ $gray: rgba(255, 255, 255, 0.6);
     cursor: not-allowed;
   }
 
-  // Loading state
   &.loading {
-    background-color: rgba(160, 90, 31, 0.8);
+    background-color: rgba(253, 73, 80, 0.85);
   }
 }
 
-// Button Loader
+// Button Loader – white spinner on primary
 .button-loader {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
-  border-top-color: $light;
-  animation: spin 0.8s linear infinite;
+  border-top-color: $white;
+  animation: login-spin 0.8s linear infinite;
 }
 
-@keyframes spin {
+@keyframes login-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-// Glow effect on focus
+// Soft glow to match project
 .login-container::before {
   content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
-  height: 300px;
+  width: 320px;
+  height: 320px;
   background: radial-gradient(
     circle,
-    rgba(245, 127, 0, 0.15) 0%,
+    rgba(253, 73, 80, 0.12) 0%,
     transparent 70%
   );
   pointer-events: none;
   z-index: -1;
-  animation: pulse 4s ease-in-out infinite;
+  animation: login-pulse 4s ease-in-out infinite;
 }
 
-@keyframes pulse {
+@keyframes login-pulse {
   0%,
   100% {
-    opacity: 0.5;
+    opacity: 0.6;
     transform: translate(-50%, -50%) scale(1);
   }
   50% {
-    opacity: 0.8;
-    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
   }
 }
 
-// Responsive
 @media (max-width: 480px) {
   .login-container {
     padding: 1.5rem;

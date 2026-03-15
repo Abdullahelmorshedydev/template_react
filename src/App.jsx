@@ -11,22 +11,7 @@ const LoginPage = lazy(() => import("./pages/LoginPage"));
 const Page404 = lazy(() => import("./pages/Page404"));
 
 function PageFallback() {
-  return (
-    <div
-      style={{
-        minHeight: "100vh",
-        width: "100%",
-        background: "#0d0d0d",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "rgba(255,255,255,0.5)",
-        fontSize: "0.9rem",
-      }}
-    >
-      Loading…
-    </div>
-  );
+  return <div className="page-fallback">Loading…</div>;
 }
 
 export default function App() {

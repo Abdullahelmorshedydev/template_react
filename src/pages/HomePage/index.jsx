@@ -471,7 +471,7 @@ export default function HomePage() {
       {/* Section 1: Happy Birthday – scroll to reveal gallery */}
       {section === "birthday" && (
         <section ref={birthdayRef} className="home-birthday-section">
-          <h1 className="home-birthday-text">Morshedy Only One</h1>
+          <h1 className="home-birthday-text">Happy Birthday Faroha</h1>
           <p className="home-birthday-hint">Scroll to continue</p>
         </section>
       )}
