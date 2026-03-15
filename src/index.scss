@@ -43,6 +43,22 @@ body {
   background-repeat: repeat;
 }
 
+// Suspense / route loading fallback – same style as app
+.page-fallback {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #ffe6e7 !important;
+  background-image: $heart-pattern-url !important;
+  background-repeat: repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(184, 74, 78, 0.9);
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 @media screen and (min-width: 100px) {
   html {
     font-size: 10px !important;
