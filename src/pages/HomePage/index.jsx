@@ -475,6 +475,7 @@ export default function HomePage() {
           <p className="home-birthday-hint">Scroll to continue</p>
         </section>
       )}
+      
 
       {/* Section 2: Gallery (wall + click to open) – visible after scroll */}
       {showGallerySection && (
